@@ -63,31 +63,4 @@ fn main() {
    println!("{:?}",result);
 }
 
-/*
-let mut left_list:Vec<u32> = vec![3,4,2,1,3,3];
-
-let mut right_list:Vec<u32> = vec![4,3,5,3,9,3];
-
-left_list.sort();
-right_list.sort();
-
-let mut distances: Vec<u32> = vec![0; LISTS_LENGHT];
-
-for i in 0..LISTS_LENGHT {
-
-    if left_list[i] == right_list[i] {
-        continue;
-    }
-    else if left_list[i] > right_list[i] {
-        distances[i] = left_list[i] - right_list[i];
-    }
-    else {
-        distances[i] = right_list[i] - left_list[i];
-    }
-}
-let sum: u32 = distances.iter().sum();
-
-println!("{}",sum);
-*/
-
 
