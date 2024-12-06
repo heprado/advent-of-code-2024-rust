@@ -1,0 +1,6 @@
+[package]
+name = "dia1-histeria-do-historiador"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
