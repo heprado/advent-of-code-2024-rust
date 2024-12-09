@@ -1,66 +1,88 @@
-fn make_same_lenght(left:&mut Vec<i128>,right:&mut Vec<i128>)  {
-
-    if left.len() == right.len() {
-        return;
-    }
-
-    if left.len() > right.len() {
-
-        let zeroes = left.len() - right.len();
-
-        for _ in 0..zeroes {
-            right.push(0);
-        }
-
-    }
-    else {
-        let zeroes = right.len() - left.len();
-
-        for _ in 0..zeroes {
-            left.push(0);
-        }
-    }
-
-}
+use std::fs;
+use std::iter::zip;
 
 fn calculate_distances(left:Vec<i128>,right:Vec<i128>) -> i128 {
 
-    let mut distances: Vec<i128> = vec![0; left.len()];
+    let mut distance: i128 = 0;
 
-    for i in 0..left.len() {
+    for (l,r) in zip(left,right) {
 
-        if left[i] == right[i] {
-            continue;
-        }
-        else if left[i] > right[i] {
-            distances[i] = left[i] - right[i];
-        }
-        else {
-            distances[i] = right[i] - left[i];
-        }
+        let result = l - r;
+
+        distance = distance + result.abs();
 
     }
-    let sum: i128 = distances.iter().sum();
 
-    sum
+    distance
+}
+
+
+fn split_lists(content:String) -> (Vec<String>,Vec<String>)  {
+
+    //Separa cada linha do arquivo em um vetor de strings.
+    let array_content:Vec<&str> = content.split("\r\n").collect();
+
+    //Variaveis para guardar os numeros em strings.
+
+    let mut left_list_string:Vec<String> = vec![];
+
+    let mut right_list_string:Vec<String> = vec![];
+
+    //Para cada linha do arquivo
+    for content in &array_content {
+
+        //Encontra um espaço e separa em um array.
+        let content = content.split("   ").collect::<Vec<&str>>();
+
+        //Pega o primeiro valor do array a cima e salva na lista correta.
+        //Index 0 são os numeros da esquerda.
+        left_list_string.push(content[0].to_string());
+        //Index 1 são os números da direita.
+        right_list_string.push(content[1].to_string());
+
+    }
+
+    (left_list_string,right_list_string)
+}
+
+fn split_numbers(left:Vec<String>,right:Vec<String>) -> (Vec<i128>,Vec<i128>) {
+
+    let iter = zip(left, right);
+
+    let mut left_result : Vec<i128> = vec![];
+
+    let mut right_result : Vec<i128> = vec![];
+
+    //Colocando as string dentro dos vetores como números.
+    for (l,r) in iter {
+
+
+        left_result.push(l.parse::<i128>().unwrap());
+
+        right_result.push(r.parse::<i128>().unwrap());
+
+        left_result.sort();
+        right_result.sort();
+
+    }
+
+    (left_result,right_result)
 }
 
 fn main() {
-    let mut left_list: Vec<i128> = vec![3,4,2,1,3,3];
 
-    let mut right_list: Vec<i128> = vec![4, 3, 5, 3, 9, 3];
 
-    left_list.sort();
-    right_list.sort();
+    let contents = fs::read_to_string("input.txt")
+        .expect("Deveriamos conseguir abrir o arquivo input.txt");
 
-    make_same_lenght(&mut left_list,&mut right_list);
 
-    println!("{:?}",left_list);
-    println!("{:?}",right_list);
+    let (left_string_vec,right_string_vec) = split_lists(contents);
 
-   let result:i128 = calculate_distances(left_list,right_list);
+    let (left_int_vec,right_int_vec) = split_numbers(left_string_vec,right_string_vec);
 
-   println!("{:?}",result);
+    let result:i128 = calculate_distances(left_int_vec,right_int_vec);
+
+    println!("{}", result);
 }
 
 
