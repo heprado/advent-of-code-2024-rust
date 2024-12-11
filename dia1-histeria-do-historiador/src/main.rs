@@ -1,7 +1,7 @@
 use std::fs;
 use std::iter::zip;
 
-fn calculate_distances(left:Vec<i128>,right:Vec<i128>) -> i128 {
+fn calculate_distances(left:&Vec<i128>,right:&Vec<i128>) -> i128 {
 
     let mut distance: i128 = 0;
 
@@ -16,8 +16,29 @@ fn calculate_distances(left:Vec<i128>,right:Vec<i128>) -> i128 {
     distance
 }
 
+fn calculate_similarity(left:&Vec<i128>,right:&Vec<i128>) -> i128 {
 
-fn split_lists(content:String) -> (Vec<String>,Vec<String>)  {
+    let mut similarity: i128 = 0;
+
+    for l in left {
+
+        let mut left_similarity: i128 = 0;
+
+        for r in right {
+
+            if l == r {
+                left_similarity = left_similarity + 1;
+            }
+
+        }
+
+        similarity = similarity + (l * left_similarity);
+    }
+
+    similarity
+}
+
+fn split_lists(content:&String) -> (Vec<String>,Vec<String>)  {
 
     //Separa cada linha do arquivo em um vetor de strings.
     let array_content:Vec<&str> = content.split("\r\n").collect();
@@ -45,7 +66,7 @@ fn split_lists(content:String) -> (Vec<String>,Vec<String>)  {
     (left_list_string,right_list_string)
 }
 
-fn split_numbers(left:Vec<String>,right:Vec<String>) -> (Vec<i128>,Vec<i128>) {
+fn split_numbers(left:&Vec<String>,right:&Vec<String>) -> (Vec<i128>,Vec<i128>) {
 
     let iter = zip(left, right);
 
@@ -76,13 +97,15 @@ fn main() {
         .expect("Deveriamos conseguir abrir o arquivo input.txt");
 
 
-    let (left_string_vec,right_string_vec) = split_lists(contents);
+    let (left_string_vec,right_string_vec) = split_lists(&contents);
 
-    let (left_int_vec,right_int_vec) = split_numbers(left_string_vec,right_string_vec);
+    let (left_int_vec,right_int_vec) = split_numbers(&left_string_vec,&right_string_vec);
 
-    let result:i128 = calculate_distances(left_int_vec,right_int_vec);
+    let distance_result:i128 = calculate_distances(&left_int_vec,&right_int_vec);
 
-    println!("{}", result);
+    println!("Distance: {}", distance_result);
+
+    println!("Similarity: {}", calculate_similarity(&left_int_vec,&right_int_vec));
 }
 
 
