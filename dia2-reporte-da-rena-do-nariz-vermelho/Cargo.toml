@@ -1,0 +1,6 @@
+[package]
+name = "dia2-reporte-da-rena-do-nariz-vermelho"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
